@@ -1,6 +1,7 @@
 package entities
 
 import java.util.*
+import kotlin.properties.Delegates
 
 /**
  * data class for storing elements
@@ -18,6 +19,7 @@ data class LabWork(val name: String,
                    val difficulty: Difficulty? = null,
                    val creationDate: Date = Date(),
                    val discipline: Discipline) : Comparable<LabWork> {
+    var id by Delegates.notNull<Long>()
 
     override fun compareTo(other: LabWork) = ((this.minimalPoint ?: 0) - (other.minimalPoint ?: 0)).toInt()
 }

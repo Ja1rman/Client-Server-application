@@ -2,6 +2,7 @@ package datamanager
 
 import entities.Difficulty
 import entities.LabWork
+
 /**
  * Object to get id and get operations
  */
@@ -12,8 +13,7 @@ object DataManager {
      * add new element
      * @param new for add new
      */
-    fun add(new: LabWork) = if (new.id > 0 && data.find { it.id == new.id } != null) data.add(new)
-                            else data.add(new.copy(id=idSetter++))
+    fun add(new: LabWork) = if (data.find { it.id == new.id } != null) throw Exception("Id ${new.id} уже существует") else data.add(new)
     /**
      * @return Items Number
      */
@@ -30,7 +30,7 @@ object DataManager {
      * @param element element to update
      */
     fun updateById(id: Long, element: LabWork) {
-        data[data.indexOfFirst { it.id == id }] = element.copy(id = id)
+        data[data.indexOfFirst { it.id == id }] = element.apply { this.id = id }
     }
     /**
      * remove data by id

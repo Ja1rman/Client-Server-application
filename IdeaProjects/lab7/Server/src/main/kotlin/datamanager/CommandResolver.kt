@@ -1,9 +1,10 @@
 package datamanager
 import entities.*
+import io.Database
 import io.Logger.logger
 
 object CommandResolver {
-    fun resolve(command: RequestData): String{
+    fun resolve(command: RequestData, userId: Long): String {
         when (command.command) {
             "add" -> {
                 try {
@@ -11,7 +12,15 @@ object CommandResolver {
                         logger.error("Null object received")
                         return "Вы дебил"
                     }
-                    DataManager.add(command.obj)
+
+                    val newId = Database.addLabWork(command.obj, userId)
+
+                    if (newId == -1L) {
+                        logger.error("USer: can't add new elem")
+                        return "Error"
+                    }
+
+                    DataManager.add(command.obj.apply { id = newId })
 
                     logger.info("User: added new elem")
                     return "Added"

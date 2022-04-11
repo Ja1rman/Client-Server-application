@@ -6,6 +6,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.sql.Timestamp
 
 object Database {
     private fun connect(): Connection {
@@ -30,7 +31,7 @@ object Database {
     }
 
     fun checkUser(userName: String,
-                  password: String): String{
+                  password: String): Long {
         try {
             val connection = connect()
 
@@ -40,26 +41,27 @@ object Database {
             query.setString(1, userName)
             query.setString(2, enPassword)
             val result = query.executeQuery()
-            while (result.next()){
+            while (result.next()) {
                 return if (result.getString("username") == userName
-                        && result.getString("password") == enPassword) "ok"
-                       else "Неверные данные"
+                        && result.getString("password") == enPassword) result.getLong("id")
+                       else -1L
             }
         } catch (e: Exception) {
-            return "Error: ${e.message}"
+            return -1L
         }
-        return "Неверные данные"
+        return -1L
     }
 
-    fun saveData(user_id: String, data: MutableList<LabWork>): String{
-        val connection = connect()
-
-        for (item in data) {
-            val query = connection.prepareStatement("insert into data (name, coordinates_x, coordinates_y, minimal_point, difficulty, creation_date, discipline_name, discipline_self_study_hours, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-            query.setString(1, item.name)
-            val result = query.executeQuery()
-        }
-    }
+//    fun saveData(user_id: String, data: MutableList<LabWork>): String {
+//        val connection = connect()
+//
+//        for (item in data) {
+//            val query = connection.prepareStatement("insert into data (name, coordinates_x, coordinates_y, minimal_point, difficulty, creation_date, discipline_name, discipline_self_study_hours, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+//            query.setString(1, item.name)
+//            val result = query.executeQuery()
+//        }
+//        return ""
+//    }
 
     private fun encryptString(input: String): String {
         return try {
@@ -74,5 +76,25 @@ object Database {
         } catch (e: NoSuchAlgorithmException) {
             throw RuntimeException(e)
         }
+    }
+
+    fun addLabWork(labWork: LabWork, userId: Long): Long {
+        val connection = connect()
+
+        val query = connection.prepareStatement("insert into data (name, coordinates_x, coordinates_y, minimal_point, difficulty, creation_date, discipline_name, discipline_self_study_hours, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?) returning id")
+        query.setString(1, labWork.name)
+        query.setLong(2, labWork.coordinates.x)
+        query.setLong(3, labWork.coordinates.y)
+        labWork.minimalPoint?.let { query.setLong(4, it) }
+        labWork.difficulty?.let { query.setString(5, it.name) }
+        query.setTimestamp(6, Timestamp.from(labWork.creationDate.toInstant()))
+        query.setString(7, labWork.discipline.name)
+        query.setInt(8, labWork.discipline.selfStudyHours)
+        query.setLong(9, userId)
+        val result = query.executeQuery()
+        while (result.next()) {
+            return result.getLong("id")
+        }
+        return -1L
     }
 }
