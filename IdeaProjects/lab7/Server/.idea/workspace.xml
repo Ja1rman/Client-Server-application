@@ -26,7 +26,17 @@
         <task path="$PROJECT_DIR$">
           <activation />
         </task>
-        <projects_view />
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Server" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
       </state>
     </system>
   </component>
@@ -136,8 +146,7 @@
       <workItem from="1648034513098" duration="11000" />
       <workItem from="1648578015024" duration="16805000" />
       <workItem from="1649536741899" duration="84000" />
-      <workItem from="1649536888514" duration="4041000" />
-      <workItem from="1649691909160" duration="20000" />
+      <workItem from="1649536888514" duration="4609000" />
     </task>
     <servers />
   </component>
