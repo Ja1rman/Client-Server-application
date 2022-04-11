@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: /Users/jairman/IdeaProjects/lab6/src/main/kotlin/Main.kt
+
