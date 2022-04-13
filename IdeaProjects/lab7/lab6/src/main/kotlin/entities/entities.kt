@@ -23,11 +23,7 @@ data class LabWork(var id: Long = -1,
     override fun compareTo(other: LabWork) = ((this.minimalPoint ?: 0) - (other.minimalPoint ?: 0)).toInt()
 }
 
-/**
- * class to hold cords
- * @param x x cord
- * @param y y cord
- */
+
 class Coordinates(
     _x: Long,
     val y: Long) {

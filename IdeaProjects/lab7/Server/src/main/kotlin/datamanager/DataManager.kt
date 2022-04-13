@@ -9,6 +9,11 @@ import entities.LabWork
 object DataManager {
     private val data = mutableListOf<LabWork>()
 
+    fun load(dat: MutableList<LabWork>) {
+        data.clear()
+        data.addAll(dat)
+    }
+
     /**
      * add new element
      * @param new for add new
@@ -38,36 +43,7 @@ object DataManager {
      */
     fun removeById(id: Long) = data.removeIf { it.id == id }
 
-    /**
-     * clear all data
-     */
-    fun clearData() = data.clear()
-    /**
-     * remove last element
-     */
-    fun removeLast() = data.removeLast()
-    /**
-     * add element if it max
-     * @param element element to add if it max
-     */
-    fun addIfMax(element: LabWork): Boolean {
-        val max = data.maxOrNull()
-        if (max == null || element > max) {
-            add(element)
-            return true
-        }
-        return false
-    }
-    /**
-     * remove elements if it lower
-     * @param element element to remove all if lower
-     */
-    fun removeLower(element: LabWork) = data.removeIf { it < element }
-    /**
-     * remove elements if it equal minimal point
-     * @param minimalPoint comp with it
-     */
-    fun removeByMP(minimalPoint: Long) = data.removeIf { it.minimalPoint == minimalPoint }
+    fun maxOfData() = data.maxOrNull()
 
     /**
      * @return sum all minimal point

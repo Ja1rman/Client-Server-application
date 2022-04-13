@@ -13,14 +13,11 @@ object CommandResolver {
                         return "Вы дебил"
                     }
 
-                    val newId = Database.addLabWork(command.obj, userId)
-
-                    if (newId == -1L) {
-                        logger.error("USer: can't add new elem")
+                    val response = add(command.obj, userId)
+                    if (response != "ok") {
+                        logger.info("Can't add elem")
                         return "Error"
                     }
-
-                    DataManager.add(command.obj.apply { id = newId })
 
                     logger.info("User: added new elem")
                     return "Added"
@@ -44,9 +41,14 @@ object CommandResolver {
             }
             "remove_last" -> {
                 return try {
-                    val response = DataManager.removeLast()
+                    val response = Database.removeLast(userId)
+                    if (response == -1L){
+                        logger.info("Can't remove last")
+                        return "Error"
+                    }
+                    val elem = DataManager.removeById(response)
                     logger.info("User: last element removed")
-                    "Removed element: $response"
+                    "Removed element: $elem"
                 } catch (e: Exception) {
                     logger.error("Error: remove last elem, ${e.message}")
                     "Can not remove element\nError: ${e.message}"
@@ -64,7 +66,12 @@ object CommandResolver {
             }
             "clear" -> {
                 return try {
-                    DataManager.clearData()
+                    val response = Database.clear(userId)
+                    if (response != "ok") {
+                        logger.info("Can't remove lower")
+                        return "Error"
+                    }
+                    DataManager.load(Database.loadAll())
                     logger.info("User: all info deleted")
                     "OK"
                 } catch (e: Exception) {
@@ -78,9 +85,14 @@ object CommandResolver {
                         logger.error("Null id received")
                         return "Вы дебил"
                     }
-                    val response = DataManager.removeById(command.id)
+                    val response = Database.removeId(command.id, userId)
+                    if (response != "ok") {
+                        logger.info(response)
+                        return "Error"
+                    }
+                    val elem = DataManager.removeById(command.id)
                     logger.info("User: elem by id removed")
-                    return if (response) "OK" else "Failed"
+                    return elem.toString()
                 } catch (e: Exception) {
                     logger.error("Error: cant remove elem by id, ${e.message}")
                     return "Can not remove element\nError: ${e.message}"
@@ -96,6 +108,13 @@ object CommandResolver {
                         logger.error("Null id received")
                         return "Вы дебил"
                     }
+
+                    val response = Database.update(command.obj, command.id, userId)
+                    if (response != "ok") {
+                        logger.info(response)
+                        return "Error"
+                    }
+
                     DataManager.updateById(
                         id = command.id,
                         command.obj
@@ -113,11 +132,18 @@ object CommandResolver {
                         logger.error("Null object received")
                         return "Вы дебил"
                     }
-                    val response = DataManager.addIfMax(
-                        command.obj
-                    )
+                    val response = DataManager.maxOfData()
+                    if (!(response == null || command.obj > response)){
+                        logger.info("Not Max Element")
+                        return "Not Max"
+                    }
+                    val resp = add(command.obj, userId)
+                    if (resp != "ok") {
+                        logger.info("Can't add elem")
+                        return "Error"
+                    }
                     logger.info("User: elem add if max success")
-                    return if (response) "Added" else "Not Added"
+                    return "Added"
                 } catch (e: Exception) {
                     logger.error("Error: cant add max elem, ${e.message}")
                     return "Can not add element\nError: ${e.message}"
@@ -129,11 +155,19 @@ object CommandResolver {
                         logger.error("Null object received")
                         return "Вы дебил"
                     }
-                    val response = DataManager.removeLower(
-                        command.obj
-                    )
+
+                    if (command.obj.minimalPoint == null) {
+                        return "No elements for remove"
+                    }
+
+                    val response = Database.removeLower(command.obj.minimalPoint, userId)
+                    if (response != "ok") {
+                        logger.info("Can't remove lower")
+                        return "Error"
+                    }
+                    DataManager.load(Database.loadAll())
                     logger.info("User: elem remove lower success")
-                    return if (response) "OK" else "Failed"
+                    return "OK"
                 } catch (e: Exception) {
                     logger.error("Error: cant remove lower elem, ${e.message}")
                     return "Can not remove lower element\nError: ${e.message}"
@@ -145,9 +179,14 @@ object CommandResolver {
                         logger.error("Null minimal point received")
                         return "Вы дебил"
                     }
-                    val response = DataManager.removeByMP(command.mp)
+                    val response = Database.removeByMP(command.mp, userId)
+                    if (response != "ok") {
+                        logger.info("Can't remove by mp")
+                        return "Error"
+                    }
+                    DataManager.load(Database.loadAll())
                     logger.info("User: remove_all_by_minimal_point success")
-                    return if (response) "OK" else "Failed"
+                    return "OK"
                 } catch (e: Exception) {
                     logger.error("Error: cant remove_all_by_minimal_point, ${e.message}")
                     return "Can not remove elements\nError: ${e.message}"
@@ -187,7 +226,6 @@ object CommandResolver {
                     update id {element} : обновить значение элемента коллекции, id которого равен заданному
                     remove_by_id id : удалить элемент из коллекции по его id
                     clear : очистить коллекцию
-                    save : сохранить коллекцию в файл
                     execute_script file_name : считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.
                     exit : завершить программу (без сохранения в файл)
                     remove_last : удалить последний элемент из коллекции
@@ -204,5 +242,15 @@ object CommandResolver {
             }
         }
     }
+    private fun add(labWork: LabWork, userId: Long): String {
+        val newId = Database.addLabWork(labWork, userId)
 
+        if (newId == -1L) {
+            logger.error("User: can't add new elem")
+            return "Error"
+        }
+
+        DataManager.add(labWork.apply { id = newId })
+        return "ok"
+    }
 }

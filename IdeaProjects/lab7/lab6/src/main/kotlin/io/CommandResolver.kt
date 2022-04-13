@@ -27,44 +27,44 @@ object CommandResolver {
                 }
                 "add" -> {
                     val res = enterVals()
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "add", "obj" to res))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "add", "obj" to res))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "show" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "show"))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "show"))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "remove_last" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "remove_last"))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "remove_last"))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "info" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "info"))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "info"))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "clear" -> {
-                    val json = mapper.writeValueAsString(mapOf("command" to "clear"))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "clear"))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "remove_by_id" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "remove_by_id", "id" to command[1]))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "remove_by_id", "id" to command[1]))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "update" -> {
                     val res = enterVals()
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "update",
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "update",
                         "id" to command[1],
                         "obj" to res))
                     output.println(json)
@@ -73,7 +73,7 @@ object CommandResolver {
                 }
                 "add_if_max" -> {
                     val res = enterVals()
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "add_if_max",
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "add_if_max",
                         "obj" to res))
                     output.println(json)
                     do println(input.readLine())
@@ -81,34 +81,34 @@ object CommandResolver {
                 }
                 "remove_lower" -> {
                     val res = enterVals()
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "remove_lower",
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "remove_lower",
                         "obj" to res))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "remove_all_by_minimal_point" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "remove_all_by_minimal_point",
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "remove_all_by_minimal_point",
                         "mp" to command[1]))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "sum_of_minimal_point" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "sum_of_minimal_point"))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "sum_of_minimal_point"))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "count_less_than_difficulty" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "count_less_than_difficulty",
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "count_less_than_difficulty",
                         "difficulty" to Difficulty.valueOf(command[1])))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
                 }
                 "help" -> {
-                    val json = mapper.writeValueAsString(mapOf("login" to login, "password" to password, "command" to "help"))
+                    val json = mapper.writeValueAsString(mapOf("userName" to login, "password" to password, "command" to "help"))
                     output.println(json)
                     do println(input.readLine())
                     while (input.ready())
@@ -156,26 +156,33 @@ object CommandResolver {
                 println("Error: ${e.message}")
             }
         }
-        var minimalPoint: Long
+        var minimalPoint: Long?
         while (true) {
             print("Enter minimalPoint: ")
             try {
-                minimalPoint = scan.readLine().toLong()
-                if (minimalPoint < 0) {
+                val input = scan.readLine()
+                if (input == ""){
+                    minimalPoint = null
+                    break
+                }
+                else if (input.toLong() <= 0) {
                     println("minimalPoint can not less than 0")
                 }
                 else {
+                    minimalPoint = input.toLong()
                     break
                 }
             } catch (e: Exception) {
                 println("Error: ${e.message}")
             }
         }
-        var difficulty: Difficulty
+        var difficulty: Difficulty?
         while (true) {
             print("Enter difficulty (VERY_EASY, NORMAL, HARD, VERY_HARD, TERRIBLE): ")
             try {
-                difficulty = Difficulty.valueOf(scan.readLine())
+                val input = scan.readLine()
+                difficulty = if (input == "") null
+                else Difficulty.valueOf(input)
                 break
             } catch (e: Exception) {
                 println("Error: ${e.message}")

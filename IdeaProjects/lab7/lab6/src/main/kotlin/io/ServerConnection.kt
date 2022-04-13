@@ -1,6 +1,5 @@
 package io
 
-import entities.Difficulty
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
@@ -26,15 +25,19 @@ object ServerConnection {
         }
     }
     fun reg(userName: String,
-            password: String): String {
-        val json = CommandResolver.mapper.writeValueAsString(mapOf("command" to "/reg", "userName" to userName, "password" to password))
+            passwrd: String): String {
+        val json = CommandResolver.mapper.writeValueAsString(mapOf("command" to "/reg", "userName" to userName, "password" to passwrd))
         output.println(json)
+        login = userName
+        password = passwrd
         return input.readLine()
     }
     fun login(userName: String,
-              password: String): String  {
-        val json = CommandResolver.mapper.writeValueAsString(mapOf("command" to "/l", "userName" to userName, "password" to password))
+              passwrd: String): String  {
+        val json = CommandResolver.mapper.writeValueAsString(mapOf("command" to "/l", "userName" to userName, "password" to passwrd))
         output.println(json)
+        login = userName
+        password = passwrd
         return input.readLine()
     }
 }

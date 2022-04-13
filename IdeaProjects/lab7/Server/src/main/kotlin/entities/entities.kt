@@ -5,7 +5,6 @@ import kotlin.properties.Delegates
 
 /**
  * data class for storing elements
- * @param id automatic generating
  * @param name name of element
  * @param coordinates 2 coords of element
  * @param minimalPoint minimal point
@@ -32,11 +31,7 @@ data class RequestData(val command: String,
                        val userName: String,
                        val password: String)
 
-/**
- * class to hold cords
- * @param x x cord
- * @param y y cord
- */
+
 class Coordinates(
     _x: Long,
     val y: Long) {
