@@ -56,16 +56,6 @@ object Database {
         return -1L
     }
 
-//    fun saveData(user_id: String, data: MutableList<LabWork>): String {
-//        val connection = connect()
-//
-//        for (item in data) {
-//            val query = connection.prepareStatement("insert into data (name, coordinates_x, coordinates_y, minimal_point, difficulty, creation_date, discipline_name, discipline_self_study_hours, user_id) values (?, ?, ?, ?, ?, ?, ?, ?, ?)")
-//            query.setString(1, item.name)
-//            val result = query.executeQuery()
-//        }
-//        return ""
-//    }
 
     private fun encryptString(input: String): String {
         return try {

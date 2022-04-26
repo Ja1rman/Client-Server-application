@@ -85,7 +85,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="Kotlin.MainKt">
+  <component name="RunManager" selected="Kotlin.MainKt (1)">
     <configuration name="SMSApp" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -123,6 +123,17 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="MainKt (1)" type="JetRunConfigurationType" nameIsGenerated="true">
+      <envs>
+        <env name="LABVAR" value="$USER_HOME$/Downloads/lab.json" />
+      </envs>
+      <option name="MAIN_CLASS_NAME" value="MainKt" />
+      <module name="lab5.main" />
+      <shortenClasspath name="NONE" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="MainKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
       <envs>
         <env name="LABVAR" value="$USER_HOME$/Downloads/lab.json" />
@@ -150,6 +161,7 @@
     <list>
       <item itemvalue="Application.SMSApp" />
       <item itemvalue="Gradle.lab6 [run]" />
+      <item itemvalue="Kotlin.MainKt (1)" />
       <item itemvalue="Kotlin.MainKt" />
     </list>
     <recent_temporary>
@@ -183,7 +195,8 @@
       <workItem from="1648577768259" duration="65000" />
       <workItem from="1648577857722" duration="12031000" />
       <workItem from="1649536741899" duration="1351000" />
-      <workItem from="1649691958953" duration="15969000" />
+      <workItem from="1649691958953" duration="17729000" />
+      <workItem from="1650972406890" duration="6361000" />
     </task>
     <servers />
   </component>

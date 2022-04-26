@@ -30,7 +30,7 @@ object CommandResolver {
                 return try {
                     var data = ""
                     for (lab in DataManager.getAllItems()) {
-                        data += "${lab}\n"
+                        data += "$lab id=${lab.id}\n"
                     }
                     logger.info("User: elements showed")
                     data
