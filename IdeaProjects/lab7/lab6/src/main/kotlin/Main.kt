@@ -32,6 +32,14 @@ fun main() {
                 println("Авторизуйтесь через /l <userName> <password> или Зарегистрируйтесь через /reg <userName> <password>")
             }
         } catch (e: Exception) {
+            try {
+                if (auth[0] == "exit") {
+                    ServerConnection.client.close()
+                    return
+                }
+            } catch (e: Exception) {
+                return
+            }
             println("Неверный формат данных! Error: ${e.message}")
         }
     }

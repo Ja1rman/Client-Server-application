@@ -64,13 +64,16 @@ object DataManager {
      * remove data by id
      * @param id id element
      */
-    fun removeById(id: Long) {
+    fun removeById(id: Long): String {
+        var ans: String
         try {
             dataLock.lock()
+            ans = data.find{ it.id == id }.toString()
             data.removeIf { it.id == id }
         } finally {
             dataLock.unlock()
         }
+        return ans
     }
 
     fun maxOfData() = data.maxOrNull()

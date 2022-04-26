@@ -41,21 +41,21 @@ fun main() = runBlocking {
                                 try {
                                     output.println(response)
                                 } catch (e: Exception) {
-                                    logger.info("Server lost connection3, ${e.message}")
+                                    logger.info("Server lost connection3")
                                     scopeFixed.cancel()
                                     scopeCached.cancel()
                                     scope.cancel()
                                 }
                             }.start()
                         } catch (e: Exception) {
-                            logger.info("Server lost connection2, ${e.message}")
+                            logger.info("Server lost connection2")
                             scopeCached.cancel()
                             scope.cancel()
                         }
                     }.start()
                 }
             } catch (e: Exception) {
-                logger.info("Server lost connection, ${e.message}")
+                logger.info("Server lost connection")
                 scope.cancel()
             }
         }.start()
